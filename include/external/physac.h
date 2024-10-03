@@ -5,7 +5,7 @@
  *   DESCRIPTION:
  *
  *   Physac is a small 2D physics library written in pure C. The engine uses a fixed time-step thread loop
- *   to simluate physics. A physics step contains the following phases: get collision information,
+ *   to simulate physics. A physics step contains the following phases: get collision information,
  *   apply dynamics, collision solving and position correction. It uses a very simple struct for physic
  *   bodies with a position vector to be used in any 3D rendering API.
  *
@@ -134,6 +134,8 @@ typedef enum
 } bool;
 #define _STDBOOL_H
 #endif
+#else
+#include "raymath.h" // Required for: Vector2Add(), Vector2Subtract()
 #endif
 
 typedef enum PhysicsShapeType
@@ -262,18 +264,19 @@ extern "C"
 #include <stdint.h>  // Required for: uint64_t
 #include <algorithm> // Required for: min(), max()
 
-#if !defined(PHYSAC_STANDALONE)
-#include "raymath.h" // Required for: Vector2Add(), Vector2Subtract()
-#endif
-
 // Time management functionality
 #include <time.h> // Required for: time(), clock_gettime()
-#if defined(__linux__)
+
+#if defined(_WIN32)
+#include <windows.h> // Required for: QueryPerformanceFrequency(), QueryPerformanceCounter()
+
+#elif defined(__linux__)
 #if _POSIX_C_SOURCE < 199309L
 #undef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 199309L // Required for CLOCK_MONOTONIC if compiled with c99 without gnu ext.
 #endif
-#include <sys/time.h>       // Required for: timespec
+#include <sys/time.h> // Required for: timespec
+
 #elif defined(__APPLE__)    // macOS also defines __MACH__
 #include <mach/mach_time.h> // Required for: mach_absolute_time()
 
