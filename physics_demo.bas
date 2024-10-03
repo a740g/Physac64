@@ -1,8 +1,8 @@
 '********************************************************************************************
 '
-'   physac demo
+'   Physac - Physics demo
 '
-'   This example uses physac 1.1 (https://github.com/raysan5/raylib/blob/master/src/physac.h)
+'   This example uses Physac (https://github.com/victorfisac/Physac)
 '
 '********************************************************************************************
 
@@ -61,12 +61,11 @@ DIM k AS LONG
 DO
     ' Update
     '----------------------------------------------------------------------------------
-    UpdatePhysics ' Update physics system
-
     k = _KEYHIT
 
     IF k = 114 _ORELSE k = 82 THEN ' Reset physics system
-        ResetPhysics
+        ClosePhysics
+        InitPhysics
 
         SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
         floor = CreatePhysicsBodyRectangle(vec, 500, 100, 10)
@@ -87,6 +86,7 @@ DO
     IF _MOUSEBUTTON(1) THEN
         SetVector2 vec, _MOUSEX, _MOUSEY
         bodyPtr = CreatePhysicsBodyPolygon(vec, GetRandomValue(20, 80), GetRandomValue(3, 8), 10)
+        'bodyPtr = CreatePhysicsBodyRectangle(vec, GetRandomValue(20, 80), GetRandomValue(20, 80), 10)
     ELSEIF _MOUSEBUTTON(2) THEN
         SetVector2 vec, _MOUSEX, _MOUSEY
         bodyPtr = CreatePhysicsBodyCircle(vec, GetRandomValue(10, 45), 10)
