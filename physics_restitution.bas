@@ -10,10 +10,10 @@ _DEFINE A-Z AS LONG
 OPTION _EXPLICIT
 
 $COLOR:32
-$EXEICON: './physac.ico'
+$EXEICON:'./physac.ico'
 
 ' Include physac library
-'$INCLUDE: 'physac.bi'
+'$INCLUDE:'include/physac.bi'
 
 ' Initialization
 '--------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ CONST FALSE%% = 0%%, TRUE%% = NOT FALSE
 CONST NULL~& = 0~&
 CONST SCREENWIDTH& = 800&
 CONST SCREENHEIGHT& = 450&
-CONST LOGOTEXT = "Physac"
+CONST LOGOTEXT = "Powered by"
 
 SCREEN _NEWIMAGE(SCREENWIDTH, SCREENHEIGHT, 32)
 
@@ -37,7 +37,7 @@ DIM AS LONG logoY: logoY = 15
 DIM logo AS LONG: logo = _LOADIMAGE("physac.ico")
 
 ' Initialize physics and default physics bodies
-InitPhysics
+InitPhysics TRUE
 
 DIM vec AS Vector2, body AS PhysicsBody
 
@@ -68,8 +68,6 @@ GetPtrBody body, circleC
 body.restitution = 0.9
 SetPtrBody circleC, body
 
-LIMIT 60
-
 ' Main game loop
 DO
     ' Update
@@ -79,11 +77,7 @@ DO
 
     ' Draw
     '----------------------------------------------------------------------------------
-    CLS , BLACK
-
-    ' Draw FPS
-    COLOR WHITE
-    _PRINTSTRING (SCREENWIDTH - 90, SCREENHEIGHT - 30), STR$(GetHertz) + " FPS"
+    CLS , Black
 
     ' Draw created physics bodies
     DIM AS LONG bodiesCount: bodiesCount = GetPhysicsBodiesCount
@@ -97,25 +91,32 @@ DO
             ' Get physics bodies shape vertices to draw lines
             DIM j AS LONG
             DIM vertexA AS Vector2: GetPhysicsShapeVertex bodyPtr, 0, vertexA
-            PSET (vertexA.x, vertexA.y), WHITE
+            PSET (vertexA.x, vertexA.y), Black
 
             FOR j = 1 TO vertexCount - 1
                 DIM vertexB AS Vector2: GetPhysicsShapeVertex bodyPtr, j, vertexB
-                LINE -(vertexB.x, vertexB.y), GREEN
+                LINE -(vertexB.x, vertexB.y), Green
             NEXT
 
-            LINE -(vertexA.x, vertexA.y), GREEN
+            LINE -(vertexA.x, vertexA.y), Green
         END IF
     NEXT
 
+    ' Draw FPS
+    COLOR White
+    _PRINTSTRING (SCREENWIDTH - 90, SCREENHEIGHT - 30), STR$(GetHertz) + " FPS"
+
     ' Draw UI elements
     _PRINTSTRING ((SCREENWIDTH - _PRINTWIDTH("Restitution amount")) \ 2, 75), "Restitution amount"
-    _PRINTSTRING (circleA->position.x - _PRINTWIDTH("0%") \ 2, circleA->position.y - 7), "0%"
-    _PRINTSTRING (circleB->position.x - _PRINTWIDTH("50%") \ 2, circleB->position.y - 7), "50%"
-    _PRINTSTRING (circleC->position.x - _PRINTWIDTH("90%") \ 2, circleC->position.y - 7), "90%"
+    GetPtrBody body, circleA
+    _PRINTSTRING (body.position.x - _PRINTWIDTH("0%") \ 2, body.position.y - 7), "0%"
+    GetPtrBody body, circleB
+    _PRINTSTRING (body.position.x - _PRINTWIDTH("50%") \ 2, body.position.y - 7), "50%"
+    GetPtrBody body, circleC
+    _PRINTSTRING (body.position.x - _PRINTWIDTH("90%") \ 2, body.position.y - 7), "90%"
 
     _PUTIMAGE (SCREENWIDTH - 100, 0)-(SCREENWIDTH - 1, 99), logo
-    COLOR BLACK
+    COLOR Black
     _PRINTSTRING (logoX, logoY), LOGOTEXT
 
     _DISPLAY
@@ -143,20 +144,3 @@ SUB SetPtrBody (bodyPtr AS _UNSIGNED _OFFSET, body AS PhysicsBody)
     PokeType bodyPtr, 0, _OFFSET(body), LEN(body)
     $CHECKING:ON
 END SUB
-
-FUNCTION GetHertz~&
-    STATIC AS _UNSIGNED LONG eventCounter, frequency
-    STATIC lastTick AS _UNSIGNED _INTEGER64
-
-    DIM currentTick AS _UNSIGNED _INTEGER64: currentTick = GetTicks
-
-    IF currentTick >= lastTick + 1000 THEN
-        lastTick = currentTick
-        frequency = eventCounter
-        eventCounter = 0
-    END IF
-
-    eventCounter = eventCounter + 1
-
-    GetHertz = frequency
-END FUNCTION
