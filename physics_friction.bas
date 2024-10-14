@@ -99,10 +99,6 @@ DO
     '----------------------------------------------------------------------------------
     CLS , Black
 
-    ' Draw FPS
-    COLOR White
-    _PRINTSTRING (SCREENWIDTH - 90, SCREENHEIGHT - 30), STR$(GetHertz) + " FPS"
-
     ' Draw created physics bodies
     DIM AS LONG bodiesCount: bodiesCount = GetPhysicsBodiesCount
     DIM i AS LONG
@@ -115,7 +111,7 @@ DO
             ' Get physics bodies shape vertices to draw lines
             DIM j AS LONG
             DIM vertexA AS Vector2: GetPhysicsShapeVertex bodyPtr, 0, vertexA
-            PSET (vertexA.x, vertexA.y), White
+            PSET (vertexA.x, vertexA.y), Black
 
             FOR j = 1 TO vertexCount - 1
                 DIM vertexB AS Vector2: GetPhysicsShapeVertex bodyPtr, j, vertexB
@@ -125,6 +121,10 @@ DO
             LINE -(vertexA.x, vertexA.y), Green
         END IF
     NEXT
+
+    ' Draw FPS
+    COLOR White
+    _PRINTSTRING (SCREENWIDTH - 90, SCREENHEIGHT - 30), STR$(GetHertz) + " FPS"
 
     ' Draw UI elements
     _PRINTSTRING ((SCREENWIDTH - _PRINTWIDTH("Friction amount")) \ 2, 75), "Friction amount"

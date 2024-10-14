@@ -10,13 +10,13 @@ _DEFINE A-Z AS LONG
 OPTION _EXPLICIT
 
 $COLOR:32
-$EXEICON: './physac.ico'
+$EXEICON:'./physac.ico'
 
 ' Include physac library
-'$INCLUDE: 'physac.bi'
+'$INCLUDE:'include/physac.bi'
 
 ' Constants
-CONST VELOCITY! = 0.5
+CONST VELOCITY! = 0.5!
 
 ' Initialization
 '--------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ CONST FALSE%% = 0%%, TRUE%% = NOT FALSE
 CONST NULL~& = 0~&
 CONST SCREENWIDTH& = 800&
 CONST SCREENHEIGHT& = 450&
-CONST LOGOTEXT = "Physac"
+CONST LOGOTEXT = "Powered by"
 
 SCREEN _NEWIMAGE(SCREENWIDTH, SCREENHEIGHT, 32)
 
@@ -40,7 +40,7 @@ DIM AS LONG logoY: logoY = 15
 DIM logo AS LONG: logo = _LOADIMAGE("physac.ico")
 
 ' Initialize physics and default physics bodies
-InitPhysics
+InitPhysics TRUE
 
 DIM vec AS Vector2, body AS PhysicsBody
 
@@ -71,10 +71,8 @@ GetPtrBody body, wallRight: body.enabled = FALSE: SetPtrBody wallRight, body
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET playerBody: playerBody = CreatePhysicsBodyRectangle(vec, 50, 50, 1)
 GetPtrBody body, playerBody
-body.freezeOrient = TRUE  ' Constrain body rotation to avoid collision torque
+body.freezeOrient = TRUE ' Constrain body rotation to avoid collision torque
 SetPtrBody playerBody, body
-
-LIMIT 60
 
 ' Main game loop
 DO
@@ -83,22 +81,18 @@ DO
     GetPtrBody body, playerBody
 
     ' Horizontal movement input
-    IF _KEYDOWN(77) THEN body.velocity.x = VELOCITY ' Right arrow key
-    IF _KEYDOWN(75) THEN body.velocity.x = -VELOCITY ' Left arrow key
+    IF _KEYDOWN(19712) THEN body.velocity.x = VELOCITY ' Right arrow key
+    IF _KEYDOWN(19200) THEN body.velocity.x = -VELOCITY ' Left arrow key
 
     ' Vertical movement input checking if player physics body is grounded
-    IF _KEYDOWN(72) AND body.isGrounded THEN body.velocity.y = -VELOCITY * 4 ' Up arrow key
+    IF _KEYDOWN(18432) AND body.isGrounded THEN body.velocity.y = -VELOCITY * 4 ' Up arrow key
 
     SetPtrBody playerBody, body
     '----------------------------------------------------------------------------------
 
     ' Draw
     '----------------------------------------------------------------------------------
-    CLS , BLACK
-
-    ' Draw FPS
-    COLOR WHITE
-    _PRINTSTRING (SCREENWIDTH - 90, SCREENHEIGHT - 30), STR$(GetHertz) + " FPS"
+    CLS , Black
 
     ' Draw created physics bodies
     DIM AS LONG bodiesCount: bodiesCount = GetPhysicsBodiesCount
@@ -112,21 +106,26 @@ DO
             ' Get physics bodies shape vertices to draw lines
             DIM j AS LONG
             DIM vertexA AS Vector2: GetPhysicsShapeVertex bodyPtr, 0, vertexA
-            PSET (vertexA.x, vertexA.y), WHITE
+            PSET (vertexA.x, vertexA.y), Black
 
             FOR j = 1 TO vertexCount - 1
                 DIM vertexB AS Vector2: GetPhysicsShapeVertex bodyPtr, j, vertexB
-                LINE -(vertexB.x, vertexB.y), GREEN
+                LINE -(vertexB.x, vertexB.y), Green
             NEXT
 
-            LINE -(vertexA.x, vertexA.y), GREEN
+            LINE -(vertexA.x, vertexA.y), Green
         END IF
     NEXT
 
+    ' Draw FPS
+    COLOR White
+    _PRINTSTRING (SCREENWIDTH - 90, SCREENHEIGHT - 30), STR$(GetHertz) + " FPS"
+
     ' Draw UI elements
     _PRINTSTRING (10, 10), "Use 'ARROWS' to move player"
+
     _PUTIMAGE (SCREENWIDTH - 100, 0)-(SCREENWIDTH - 1, 99), logo
-    COLOR BLACK
+    COLOR Black
     _PRINTSTRING (logoX, logoY), LOGOTEXT
 
     _DISPLAY
@@ -154,20 +153,3 @@ SUB SetPtrBody (bodyPtr AS _UNSIGNED _OFFSET, body AS PhysicsBody)
     PokeType bodyPtr, 0, _OFFSET(body), LEN(body)
     $CHECKING:ON
 END SUB
-
-FUNCTION GetHertz~&
-    STATIC AS _UNSIGNED LONG eventCounter, frequency
-    STATIC lastTick AS _UNSIGNED _INTEGER64
-
-    DIM currentTick AS _UNSIGNED _INTEGER64: currentTick = GetTicks
-
-    IF currentTick >= lastTick + 1000 THEN
-        lastTick = currentTick
-        frequency = eventCounter
-        eventCounter = 0
-    END IF
-
-    eventCounter = eventCounter + 1
-
-    GetHertz = frequency
-END FUNCTION
