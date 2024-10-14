@@ -5,8 +5,8 @@
 
 $INCLUDEONCE
 
-$IF 32BIT THEN
-    $ERROR 'This library requires the latest 64-bit version of QB64-PE from https://github.com/QB64-Phoenix-Edition/QB64pe/releases/latest'
+$IF VERSION < 3.14.1 OR 32BIT THEN
+    $ERROR 'Physac-64 requires the latest 64-bit version of QB64-PE from https://github.com/QB64-Phoenix-Edition/QB64pe/releases/latest'
 $END IF
 
 CONST FALSE%% = 0%%, TRUE%% = NOT FALSE
