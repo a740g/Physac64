@@ -59,24 +59,24 @@ SetVector2 vec, SCREENWIDTH + 4, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET wallRight: wallRight = CreatePhysicsBodyRectangle(vec, 10, SCREENHEIGHT, 10)
 
 ' Disable dynamics to floor and walls physics bodies
-GetPtrBody body, floor: body.enabled = FALSE: SetPtrBody floor, body
-GetPtrBody body, platformLeft: body.enabled = FALSE: SetPtrBody platformLeft, body
-GetPtrBody body, platformRight: body.enabled = FALSE: SetPtrBody platformRight, body
-GetPtrBody body, wallLeft: body.enabled = FALSE: SetPtrBody wallLeft, body
-GetPtrBody body, wallRight: body.enabled = FALSE: SetPtrBody wallRight, body
+GetPhysicsBodyOffset body, floor: body.enabled = FALSE: SetPhysicsBodyOffset floor, body
+GetPhysicsBodyOffset body, platformLeft: body.enabled = FALSE: SetPhysicsBodyOffset platformLeft, body
+GetPhysicsBodyOffset body, platformRight: body.enabled = FALSE: SetPhysicsBodyOffset platformRight, body
+GetPhysicsBodyOffset body, wallLeft: body.enabled = FALSE: SetPhysicsBodyOffset wallLeft, body
+GetPhysicsBodyOffset body, wallRight: body.enabled = FALSE: SetPhysicsBodyOffset wallRight, body
 
 ' Create movement physics body
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET playerBody: playerBody = CreatePhysicsBodyRectangle(vec, 50, 50, 1)
-GetPtrBody body, playerBody
+GetPhysicsBodyOffset body, playerBody
 body.freezeOrient = TRUE ' Constrain body rotation to avoid collision torque
-SetPtrBody playerBody, body
+SetPhysicsBodyOffset playerBody, body
 
 ' Main game loop
 DO
     ' Update
     '----------------------------------------------------------------------------------
-    GetPtrBody body, playerBody
+    GetPhysicsBodyOffset body, playerBody
 
     ' Horizontal movement input
     IF _KEYDOWN(19712) THEN body.velocity.x = VELOCITY ' Right arrow key
@@ -85,7 +85,7 @@ DO
     ' Vertical movement input checking if player physics body is grounded
     IF _KEYDOWN(18432) AND body.isGrounded THEN body.velocity.y = -VELOCITY * 4 ' Up arrow key
 
-    SetPtrBody playerBody, body
+    SetPhysicsBodyOffset playerBody, body
     '----------------------------------------------------------------------------------
 
     ' Draw
@@ -138,16 +138,3 @@ ClosePhysics
 '--------------------------------------------------------------------------------------
 
 SYSTEM
-
-
-SUB GetPtrBody (body AS PhysicsBody, bodyPtr AS _UNSIGNED _OFFSET)
-    $CHECKING:OFF
-    PeekType bodyPtr, 0, _OFFSET(body), LEN(body)
-    $CHECKING:ON
-END SUB
-
-SUB SetPtrBody (bodyPtr AS _UNSIGNED _OFFSET, body AS PhysicsBody)
-    $CHECKING:OFF
-    PokeType bodyPtr, 0, _OFFSET(body), LEN(body)
-    $CHECKING:ON
-END SUB

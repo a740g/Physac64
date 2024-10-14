@@ -42,48 +42,48 @@ DIM vec AS Vector2, body AS PhysicsBody
 ' Create floor rectangle physics body (PhysicsBody)
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
 DIM AS _UNSIGNED _OFFSET floor: floor = CreatePhysicsBodyRectangle(vec, SCREENWIDTH, 100, 10)
-GetPtrBody body, floor ' read type from ptr
+GetPhysicsBodyOffset body, floor ' read type from ptr
 body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
-SetPtrBody floor, body ' write type to ptr
+SetPhysicsBodyOffset floor, body ' write type to ptr
 
 ' Create wall rectangle physics body
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT * 0.8!
 DIM AS _UNSIGNED _OFFSET wall: wall = CreatePhysicsBodyRectangle(vec, 10, 80, 10)
-GetPtrBody body, wall ' read type from ptr
+GetPhysicsBodyOffset body, wall ' read type from ptr
 body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
-SetPtrBody wall, body ' write type to ptr
+SetPhysicsBodyOffset wall, body ' write type to ptr
 
 ' Create left ramp rectangle physics body
 SetVector2 vec, 25, SCREENHEIGHT - 5
 DIM AS _UNSIGNED _OFFSET rectLeft: rectLeft = CreatePhysicsBodyRectangle(vec, 250, 250, 10)
-GetPtrBody body, rectLeft
+GetPhysicsBodyOffset body, rectLeft
 body.enabled = FALSE
-SetPtrBody rectLeft, body
+SetPhysicsBodyOffset rectLeft, body
 SetPhysicsBodyRotation rectLeft, 30! * PHYSAC_DEG2RAD
 
 ' Create right ramp rectangle physics body
 SetVector2 vec, SCREENWIDTH - 25, SCREENHEIGHT - 5
 DIM AS _UNSIGNED _OFFSET rectRight: rectRight = CreatePhysicsBodyRectangle(vec, 250, 250, 10)
-GetPtrBody body, rectRight
+GetPhysicsBodyOffset body, rectRight
 body.enabled = FALSE
-SetPtrBody rectRight, body
+SetPhysicsBodyOffset rectRight, body
 SetPhysicsBodyRotation rectRight, 330! * PHYSAC_DEG2RAD
 
 ' Create dynamic physics bodies
 SetVector2 vec, 35, SCREENHEIGHT * 0.6!
 DIM AS _UNSIGNED _OFFSET bodyA: bodyA = CreatePhysicsBodyRectangle(vec, 40, 40, 10)
-GetPtrBody body, bodyA
+GetPhysicsBodyOffset body, bodyA
 body.staticFriction = 0.1!
 body.dynamicFriction = 0.1!
-SetPtrBody bodyA, body
+SetPhysicsBodyOffset bodyA, body
 SetPhysicsBodyRotation bodyA, 30! * PHYSAC_DEG2RAD
 
 SetVector2 vec, SCREENWIDTH - 35, SCREENHEIGHT * 0.6!
 DIM AS _UNSIGNED _OFFSET bodyB: bodyB = CreatePhysicsBodyRectangle(vec, 40, 40, 10)
-GetPtrBody body, bodyB
+GetPhysicsBodyOffset body, bodyB
 body.staticFriction = 1!
 body.dynamicFriction = 1!
-SetPtrBody bodyB, body
+SetPhysicsBodyOffset bodyB, body
 SetPhysicsBodyRotation bodyB, 330! * PHYSAC_DEG2RAD
 
 ' Main game loop
@@ -126,9 +126,9 @@ DO
 
     ' Draw UI elements
     _PRINTSTRING ((SCREENWIDTH - _PRINTWIDTH("Friction amount")) \ 2, 75), "Friction amount"
-    GetPtrBody body, bodyA
+    GetPhysicsBodyOffset body, bodyA
     _PRINTSTRING (body.position.x - _PRINTWIDTH("0.1") \ 2, body.position.y - 7), "0.1"
-    GetPtrBody body, bodyB
+    GetPhysicsBodyOffset body, bodyB
     _PRINTSTRING (body.position.x - _PRINTWIDTH("1") \ 2, body.position.y - 7), "1"
 
     _PUTIMAGE (SCREENWIDTH - 100, 0)-(SCREENWIDTH - 1, 99), logo
@@ -147,16 +147,3 @@ ClosePhysics
 '--------------------------------------------------------------------------------------
 
 SYSTEM
-
-
-SUB GetPtrBody (body AS PhysicsBody, bodyPtr AS _UNSIGNED _OFFSET)
-    $CHECKING:OFF
-    PeekType bodyPtr, 0, _OFFSET(body), LEN(body)
-    $CHECKING:ON
-END SUB
-
-SUB SetPtrBody (bodyPtr AS _UNSIGNED _OFFSET, body AS PhysicsBody)
-    $CHECKING:OFF
-    PokeType bodyPtr, 0, _OFFSET(body), LEN(body)
-    $CHECKING:ON
-END SUB

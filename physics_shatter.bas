@@ -122,16 +122,3 @@ ClosePhysics
 '--------------------------------------------------------------------------------------
 
 SYSTEM
-
-
-SUB GetPtrBody (body AS PhysicsBody, bodyPtr AS _UNSIGNED _OFFSET)
-    $CHECKING:OFF
-    PeekType bodyPtr, 0, _OFFSET(body), LEN(body)
-    $CHECKING:ON
-END SUB
-
-SUB SetPtrBody (bodyPtr AS _UNSIGNED _OFFSET, body AS PhysicsBody)
-    $CHECKING:OFF
-    PokeType bodyPtr, 0, _OFFSET(body), LEN(body)
-    $CHECKING:ON
-END SUB

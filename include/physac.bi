@@ -73,18 +73,24 @@ END TYPE
 
 DECLARE STATIC LIBRARY "physac"
     SUB InitPhysics ALIAS "__InitPhysics" (BYVAL isThreaded AS _BYTE) ' Initializes physics values, pointers and creates physics loop thread
-    SUB RunPhysicsStep ' Run physics step, to be used if PHYSICS_NO_THREADS is set in your main loop
+    SUB RunPhysicsStep ' Run physics step, to be used if isThreaded is set to FALSE when calling InitPhysics
     SUB SetPhysicsTimeStep (BYVAL delta AS DOUBLE) 'Sets physics fixed time step in milliseconds. 1.666666 by default
     FUNCTION IsPhysicsEnabled%% ALIAS "__IsPhysicsEnabled" ' Returns true if physics thread is currently enabled
     SUB SetPhysicsGravity (BYVAL x AS SINGLE, BYVAL y AS SINGLE) ' Sets physics global gravity force
+    SUB GetPhysicsBodyOffset (body AS PhysicsBody, BYVAL bodyOffset AS _UNSIGNED _OFFSET) ' Gets a physics body TYPE value from a pointer
+    SUB SetPhysicsBodyOffset (BYVAL bodyOffset AS _UNSIGNED _OFFSET, body AS PhysicsBody) ' Sets a physics body TYPE value to a pointer
     FUNCTION CreatePhysicsBodyCircle~%& ALIAS "__CreatePhysicsBodyCircle" (position AS Vector2, BYVAL radius AS SINGLE, BYVAL density AS SINGLE) ' Creates a new circle physics body with generic parameters
+    SUB CreatePhysicsBodyCircle ALIAS "__CreatePhysicsBodyCircle" (position AS Vector2, BYVAL radius AS SINGLE, BYVAL density AS SINGLE, retVal AS PhysicsBody) ' Creates a new circle physics body with generic parameters
     FUNCTION CreatePhysicsBodyRectangle~%& ALIAS "__CreatePhysicsBodyRectangle" (position AS Vector2, BYVAL wid AS SINGLE, BYVAL hgt AS SINGLE, BYVAL density AS SINGLE) ' Creates a new rectangle physics body with generic parameters
+    SUB CreatePhysicsBodyRectangle ALIAS "__CreatePhysicsBodyRectangle" (position AS Vector2, BYVAL wid AS SINGLE, BYVAL hgt AS SINGLE, BYVAL density AS SINGLE, retVal AS PhysicsBody) ' Creates a new rectangle physics body with generic parameters
     FUNCTION CreatePhysicsBodyPolygon~%& ALIAS "__CreatePhysicsBodyPolygon" (position AS Vector2, BYVAL radius AS SINGLE, BYVAL sides AS LONG, BYVAL density AS SINGLE) ' Creates a new polygon physics body with generic parameters
+    SUB CreatePhysicsBodyPolygon ALIAS "__CreatePhysicsBodyPolygon" (position AS Vector2, BYVAL radius AS SINGLE, BYVAL sides AS LONG, BYVAL density AS SINGLE, retVal AS PhysicsBody) ' Creates a new polygon physics body with generic parameters
     SUB PhysicsAddForce ALIAS "__PhysicsAddForce" (BYVAL body AS _UNSIGNED _OFFSET, force AS Vector2) ' Adds a force to a physics body
     SUB PhysicsAddTorque ALIAS "__PhysicsAddTorque" (BYVAL body AS _UNSIGNED _OFFSET, BYVAL amount AS SINGLE) ' Adds a angular force to a physics body
     SUB PhysicsShatter ALIAS "__PhysicsShatter" (BYVAL body AS _UNSIGNED _OFFSET, position AS Vector2, BYVAL force AS SINGLE) ' Shatters a polygon shape physics body to little physics bodies with explosion force
     FUNCTION GetPhysicsBodiesCount& ' Returns the current amount of created physics bodies
     FUNCTION GetPhysicsBody~%& (BYVAL index AS LONG) ' Returns a physics body of the bodies pool at a specific index
+    SUB GetPhysicsBody ALIAS "__GetPhysicsBody" (BYVAL index AS LONG, retVal AS PhysicsBody) ' Returns a physics body of the bodies pool at a specific index
     FUNCTION GetPhysicsShapeType& (BYVAL index AS LONG) ' Returns the physics body shape type (PHYSICS_CIRCLE or PHYSICS_POLYGON)
     FUNCTION GetPhysicsShapeVerticesCount& (BYVAL index AS LONG) ' Returns the amount of vertices of a physics body shape
     SUB GetPhysicsShapeVertex ALIAS "__GetPhysicsShapeVertex" (BYVAL body AS _UNSIGNED _OFFSET, BYVAL vertex AS LONG, retVal AS Vector2) ' Returns transformed position of a body shape (body position + vertex transformed position)

@@ -42,29 +42,29 @@ DIM vec AS Vector2, body AS PhysicsBody
 ' Create floor rectangle physics body
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
 DIM AS _UNSIGNED _OFFSET floor: floor = CreatePhysicsBodyRectangle(vec, SCREENWIDTH, 100, 10)
-GetPtrBody body, floor ' read type from ptr
+GetPhysicsBodyOffset body, floor ' read type from ptr
 body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
 body.restitution = 1
-SetPtrBody floor, body
+SetPhysicsBodyOffset floor, body
 
 ' Create circles physics bodies
 SetVector2 vec, SCREENWIDTH * 0.25!, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET circleA: circleA = CreatePhysicsBodyCircle(vec, 30, 10)
-GetPtrBody body, circleA
+GetPhysicsBodyOffset body, circleA
 body.restitution = 0.0
-SetPtrBody circleA, body
+SetPhysicsBodyOffset circleA, body
 
 SetVector2 vec, SCREENWIDTH * 0.5!, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET circleB: circleB = CreatePhysicsBodyCircle(vec, 30, 10)
-GetPtrBody body, circleB
+GetPhysicsBodyOffset body, circleB
 body.restitution = 0.5
-SetPtrBody circleB, body
+SetPhysicsBodyOffset circleB, body
 
 SetVector2 vec, SCREENWIDTH * 0.75!, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET circleC: circleC = CreatePhysicsBodyCircle(vec, 30, 10)
-GetPtrBody body, circleC
+GetPhysicsBodyOffset body, circleC
 body.restitution = 0.9
-SetPtrBody circleC, body
+SetPhysicsBodyOffset circleC, body
 
 ' Main game loop
 DO
@@ -106,11 +106,11 @@ DO
 
     ' Draw UI elements
     _PRINTSTRING ((SCREENWIDTH - _PRINTWIDTH("Restitution amount")) \ 2, 75), "Restitution amount"
-    GetPtrBody body, circleA
+    GetPhysicsBodyOffset body, circleA
     _PRINTSTRING (body.position.x - _PRINTWIDTH("0%") \ 2, body.position.y - 7), "0%"
-    GetPtrBody body, circleB
+    GetPhysicsBodyOffset body, circleB
     _PRINTSTRING (body.position.x - _PRINTWIDTH("50%") \ 2, body.position.y - 7), "50%"
-    GetPtrBody body, circleC
+    GetPhysicsBodyOffset body, circleC
     _PRINTSTRING (body.position.x - _PRINTWIDTH("90%") \ 2, body.position.y - 7), "90%"
 
     _PUTIMAGE (SCREENWIDTH - 100, 0)-(SCREENWIDTH - 1, 99), logo
@@ -129,16 +129,3 @@ ClosePhysics
 '--------------------------------------------------------------------------------------
 
 SYSTEM
-
-
-SUB GetPtrBody (body AS PhysicsBody, bodyPtr AS _UNSIGNED _OFFSET)
-    $CHECKING:OFF
-    PeekType bodyPtr, 0, _OFFSET(body), LEN(body)
-    $CHECKING:ON
-END SUB
-
-SUB SetPtrBody (bodyPtr AS _UNSIGNED _OFFSET, body AS PhysicsBody)
-    $CHECKING:OFF
-    PokeType bodyPtr, 0, _OFFSET(body), LEN(body)
-    $CHECKING:ON
-END SUB

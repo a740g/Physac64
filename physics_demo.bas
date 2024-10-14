@@ -56,16 +56,16 @@ DIM vec AS Vector2, body AS PhysicsBody, bodyPtr AS _UNSIGNED _OFFSET
 ' Create floor rectangle physics body (PhysicsBody)
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
 DIM AS _UNSIGNED _OFFSET floor: floor = CreatePhysicsBodyRectangle(vec, 500, 100, 10)
-GetPtrBody body, floor ' read type from ptr
+GetPhysicsBodyOffset body, floor ' read type from ptr
 body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
-SetPtrBody floor, body ' write type to ptr
+SetPhysicsBodyOffset floor, body ' write type to ptr
 
 ' Create obstacle circle physics body (PhysicsBody)
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET circl: circl = CreatePhysicsBodyCircle(vec, 45, 10)
-GetPtrBody body, circl ' read type from ptr
+GetPhysicsBodyOffset body, circl ' read type from ptr
 body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
-SetPtrBody circl, body ' write type to ptr
+SetPhysicsBodyOffset circl, body ' write type to ptr
 '--------------------------------------------------------------------------------------
 
 DIM k AS LONG
@@ -90,15 +90,15 @@ DO
 
         SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
         floor = CreatePhysicsBodyRectangle(vec, 500, 100, 10)
-        GetPtrBody body, floor ' read type from ptr
+        GetPhysicsBodyOffset body, floor ' read type from ptr
         body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
-        SetPtrBody floor, body ' write type to ptr
+        SetPhysicsBodyOffset floor, body ' write type to ptr
 
         SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT / 2!
         circl = CreatePhysicsBodyCircle(vec, 45, 10)
-        GetPtrBody body, circl ' read type from ptr
+        GetPhysicsBodyOffset body, circl ' read type from ptr
         body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
-        SetPtrBody circl, body ' write type to ptr
+        SetPhysicsBodyOffset circl, body ' write type to ptr
     END IF
 
     WHILE _MOUSEINPUT: WEND
@@ -119,7 +119,7 @@ DO
     DIM i AS LONG: FOR i = bodiesCount - 1 TO 0 STEP -1
         bodyPtr = GetPhysicsBody(i)
         IF bodyPtr <> NULL THEN
-            GetPtrBody body, bodyPtr ' read type from ptr
+            GetPhysicsBodyOffset body, bodyPtr ' read type from ptr
             IF body.position.y > SCREENHEIGHT * 2 THEN DestroyPhysicsBody bodyPtr
         END IF
     NEXT
@@ -183,17 +183,3 @@ ClosePhysics ' Unitialize physics
 '--------------------------------------------------------------------------------------
 
 SYSTEM
-
-
-SUB GetPtrBody (body AS PhysicsBody, bodyPtr AS _UNSIGNED _OFFSET)
-    $CHECKING:OFF
-    PeekType bodyPtr, 0, _OFFSET(body), LEN(body) ' read type from ptr
-    $CHECKING:ON
-END SUB
-
-
-SUB SetPtrBody (bodyPtr AS _UNSIGNED _OFFSET, body AS PhysicsBody)
-    $CHECKING:OFF
-    PokeType bodyPtr, 0, _OFFSET(body), LEN(body) ' write type to ptr
-    $CHECKING:ON
-END SUB

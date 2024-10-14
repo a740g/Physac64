@@ -20,9 +20,24 @@ inline qb_bool __IsPhysicsEnabled()
     return TO_QB_BOOL(IsPhysicsEnabled());
 }
 
+inline void GetPhysicsBodyOffset(void *body, uintptr_t bodyOffset)
+{
+    *(PhysicsBodyData *)body = *(PhysicsBodyData *)bodyOffset;
+}
+
+inline void SetPhysicsBodyOffset(uintptr_t bodyOffset, void *body)
+{
+    *(PhysicsBodyData *)bodyOffset = *(PhysicsBodyData *)body;
+}
+
 inline PhysicsBody __CreatePhysicsBodyCircle(void *pos, float radius, float density)
 {
     return CreatePhysicsBodyCircle(*(Vector2 *)pos, radius, density);
+}
+
+inline void __CreatePhysicsBodyCircle(void *pos, float radius, float density, void *retVal)
+{
+    *(PhysicsBodyData *)retVal = *(PhysicsBodyData *)CreatePhysicsBodyCircle(*(Vector2 *)pos, radius, density);
 }
 
 inline PhysicsBody __CreatePhysicsBodyRectangle(void *pos, float width, float height, float density)
@@ -30,9 +45,19 @@ inline PhysicsBody __CreatePhysicsBodyRectangle(void *pos, float width, float he
     return CreatePhysicsBodyRectangle(*(Vector2 *)pos, width, height, density);
 }
 
+inline void __CreatePhysicsBodyRectangle(void *pos, float width, float height, float density, void *retVal)
+{
+    *(PhysicsBodyData *)retVal = *(PhysicsBodyData *)CreatePhysicsBodyRectangle(*(Vector2 *)pos, width, height, density);
+}
+
 inline PhysicsBody __CreatePhysicsBodyPolygon(void *pos, float radius, int sides, float density)
 {
     return CreatePhysicsBodyPolygon(*(Vector2 *)pos, radius, sides, density);
+}
+
+inline void __CreatePhysicsBodyPolygon(void *pos, float radius, int sides, float density, void *retVal)
+{
+    *(PhysicsBodyData *)retVal = *(PhysicsBodyData *)CreatePhysicsBodyPolygon(*(Vector2 *)pos, radius, sides, density);
 }
 
 inline void __PhysicsAddForce(uintptr_t body, void *force)
@@ -48,6 +73,11 @@ inline void __PhysicsAddTorque(uintptr_t body, float amount)
 inline void __PhysicsShatter(uintptr_t body, void *position, float force)
 {
     PhysicsShatter((PhysicsBody)body, *(Vector2 *)position, force);
+}
+
+inline void __GetPhysicsBody(int index, void *retVal)
+{
+    *(PhysicsBodyData *)retVal = *(PhysicsBodyData *)GetPhysicsBody(index);
 }
 
 inline void __GetPhysicsShapeVertex(uintptr_t body, int vertex, void *retVal)
