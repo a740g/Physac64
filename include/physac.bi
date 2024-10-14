@@ -49,7 +49,8 @@ END TYPE
 
 TYPE PhysicsBody
     AS _UNSIGNED LONG id ' Reference unique identifier
-    AS LONG enabled ' Enabled dynamics state (collisions are calculated anyway)
+    AS _BYTE enabled ' Enabled dynamics state (collisions are calculated anyway)
+    AS STRING * 3 __padding1
     AS Vector2 position ' Physics body shape pivot
     AS Vector2 velocity ' Current linear velocity applied to position
     AS Vector2 force ' Current linear force (reset to 0 every step)
@@ -65,8 +66,8 @@ TYPE PhysicsBody
     AS SINGLE restitution ' Restitution coefficient of the body (0 to 1)
     AS _BYTE useGravity ' Apply gravity force to dynamics
     AS _BYTE isGrounded ' Physics grounded on other body state
-    AS INTEGER freezeOrient ' Physics rotation constraint
-    AS STRING * 4 __padding
+    AS _BYTE freezeOrient ' Physics rotation constraint
+    AS STRING * 5 __padding2
     AS PhysicsShape shape ' Physics body shape information (type, radius, vertices, normals)
 END TYPE
 
