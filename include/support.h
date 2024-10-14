@@ -80,6 +80,10 @@ struct Matrix
 #define RL_MATRIX_TYPE 1
 #endif
 
+/// @brief GetTicks returns the number of "ticks" (ms) since the program started execution where 1000 "ticks" (ms) = 1 second.
+/// @return Ticks in ms.
+extern int64_t GetTicks();
+
 // Various interop functions that make life easy when working with external libs
 
 template <typename T>
@@ -271,4 +275,25 @@ inline void SetVector3(void *v, float x, float y, float z)
 inline void SetVector4(void *v, float x, float y, float z, float w)
 {
     (*reinterpret_cast<Vector4 *>(v)) = {x, y, z, w};
+}
+
+/// @brief Calculates and returns the Hertz when repeatedly called inside a loop
+/// @return A positive Hertz value
+uint32_t GetHertz()
+{
+    static uint32_t eventCounter = 0, frequency = 0;
+    static uint64_t lastTime = 0;
+
+    uint64_t currentTime = GetTicks();
+
+    if (currentTime >= lastTime + 1000)
+    {
+        lastTime = currentTime;
+        frequency = eventCounter;
+        eventCounter = 0;
+    }
+
+    ++eventCounter;
+
+    return frequency;
 }

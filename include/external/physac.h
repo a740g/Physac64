@@ -298,6 +298,7 @@ extern "C"
 //----------------------------------------------------------------------------------
 #if !defined(PHYSAC_NO_THREADS)
 static libqb_thread *physicsThreadId = nullptr; // Physics thread id
+static bool physicsCreateThread = true;         // If true, physics thread will be created
 #endif
 static unsigned int usedMemory = 0;                 // Total allocated dynamic memory
 static volatile bool physicsThreadEnabled = false;  // Physics thread enabled state
@@ -373,9 +374,12 @@ PHYSACDEF void InitPhysics(void)
 #if !defined(PHYSAC_NO_THREADS)
     // NOTE: if defined, user will need to create a thread for PhysicsThread function manually
     // Create physics thread using libqb thread libraries
-    physicsThreadId = libqb_thread_new();
-    if (physicsThreadId)
-        libqb_thread_start(physicsThreadId, &PhysicsLoop, NULL);
+    if (physicsCreateThread)
+    {
+        physicsThreadId = libqb_thread_new();
+        if (physicsThreadId)
+            libqb_thread_start(physicsThreadId, &PhysicsLoop, NULL);
+    }
 #endif
 
     // Initialize high resolution timer

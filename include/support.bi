@@ -67,6 +67,8 @@ CONST SIZE_OF_MATRIX~& = 64~&
 DECLARE STATIC LIBRARY "support"
     ' Returns the milliseconds since program start
     FUNCTION GetTicks~&&
+    ' Calculates and returns the Hertz when repeatedly called inside a loop
+    FUNCTION GetHertz~&
     ' Casts a QB64 _OFFSET to an unsigned integer64. Needed because QB64 does not allow converting or using _OFFSET in expressions (fully :()
     FUNCTION CLngPtr~&& ALIAS "uintptr_t" (BYVAL p AS _UNSIGNED _OFFSET)
     ' Sets count bytes in dst to ch

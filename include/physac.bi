@@ -71,7 +71,7 @@ TYPE PhysicsBody
 END TYPE
 
 DECLARE STATIC LIBRARY "physac"
-    SUB InitPhysics ' Initializes physics values, pointers and creates physics loop thread
+    SUB InitPhysics ALIAS "__InitPhysics" (BYVAL isThreaded AS _BYTE) ' Initializes physics values, pointers and creates physics loop thread
     SUB RunPhysicsStep ' Run physics step, to be used if PHYSICS_NO_THREADS is set in your main loop
     SUB SetPhysicsTimeStep (BYVAL delta AS DOUBLE) 'Sets physics fixed time step in milliseconds. 1.666666 by default
     FUNCTION IsPhysicsEnabled%% ALIAS "__IsPhysicsEnabled" ' Returns true if physics thread is currently enabled

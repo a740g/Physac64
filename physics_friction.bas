@@ -10,10 +10,10 @@ _DEFINE A-Z AS LONG
 OPTION _EXPLICIT
 
 $COLOR:32
-$EXEICON: './physac.ico'
+$EXEICON:'./physac.ico'
 
 ' Include physac library
-'$INCLUDE: 'physac.bi'
+'$INCLUDE:'include/physac.bi'
 
 ' Initialization
 '--------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ CONST FALSE%% = 0%%, TRUE%% = NOT FALSE
 CONST NULL~& = 0~&
 CONST SCREENWIDTH& = 800&
 CONST SCREENHEIGHT& = 450&
-CONST LOGOTEXT = "Physac"
+CONST LOGOTEXT = "Powered by"
 
 SCREEN _NEWIMAGE(SCREENWIDTH, SCREENHEIGHT, 32)
 
@@ -37,7 +37,7 @@ DIM AS LONG logoY: logoY = 15
 DIM logo AS LONG: logo = _LOADIMAGE("physac.ico")
 
 ' Initialize physics and default physics bodies
-InitPhysics
+InitPhysics TRUE
 
 DIM vec AS Vector2, body AS PhysicsBody
 
@@ -52,43 +52,41 @@ SetPtrBody floor, body ' write type to ptr
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT * 0.8!
 DIM AS _UNSIGNED _OFFSET wall: wall = CreatePhysicsBodyRectangle(vec, 10, 80, 10)
 GetPtrBody body, wall ' read type from ptr
-body.enabled = FALSE
-SetPtrBody wall, body
+body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
+SetPtrBody wall, body ' write type to ptr
 
 ' Create left ramp rectangle physics body
 SetVector2 vec, 25, SCREENHEIGHT - 5
 DIM AS _UNSIGNED _OFFSET rectLeft: rectLeft = CreatePhysicsBodyRectangle(vec, 250, 250, 10)
 GetPtrBody body, rectLeft
 body.enabled = FALSE
-SetPhysicsBodyRotation rectLeft, 30 * DEG2RAD
 SetPtrBody rectLeft, body
+SetPhysicsBodyRotation rectLeft, 30! * PHYSAC_DEG2RAD
 
 ' Create right ramp rectangle physics body
 SetVector2 vec, SCREENWIDTH - 25, SCREENHEIGHT - 5
 DIM AS _UNSIGNED _OFFSET rectRight: rectRight = CreatePhysicsBodyRectangle(vec, 250, 250, 10)
 GetPtrBody body, rectRight
 body.enabled = FALSE
-SetPhysicsBodyRotation rectRight, 330 * DEG2RAD
 SetPtrBody rectRight, body
+SetPhysicsBodyRotation rectRight, 330! * PHYSAC_DEG2RAD
 
 ' Create dynamic physics bodies
 SetVector2 vec, 35, SCREENHEIGHT * 0.6!
 DIM AS _UNSIGNED _OFFSET bodyA: bodyA = CreatePhysicsBodyRectangle(vec, 40, 40, 10)
 GetPtrBody body, bodyA
-body.staticFriction = 0.1
-body.dynamicFriction = 0.1
-SetPhysicsBodyRotation bodyA, 30 * DEG2RAD
+body.staticFriction = 0.1!
+body.dynamicFriction = 0.1!
 SetPtrBody bodyA, body
+SetPhysicsBodyRotation bodyA, 30! * PHYSAC_DEG2RAD
 
 SetVector2 vec, SCREENWIDTH - 35, SCREENHEIGHT * 0.6!
 DIM AS _UNSIGNED _OFFSET bodyB: bodyB = CreatePhysicsBodyRectangle(vec, 40, 40, 10)
 GetPtrBody body, bodyB
-body.staticFriction = 1
-body.dynamicFriction = 1
-SetPhysicsBodyRotation bodyB, 330 * DEG2RAD
+body.staticFriction = 1!
+body.dynamicFriction = 1!
 SetPtrBody bodyB, body
-
-LIMIT 60
+SetPhysicsBodyRotation bodyB, 330! * PHYSAC_DEG2RAD
 
 ' Main game loop
 DO
@@ -99,10 +97,10 @@ DO
 
     ' Draw
     '----------------------------------------------------------------------------------
-    CLS , BLACK
+    CLS , Black
 
     ' Draw FPS
-    COLOR WHITE
+    COLOR White
     _PRINTSTRING (SCREENWIDTH - 90, SCREENHEIGHT - 30), STR$(GetHertz) + " FPS"
 
     ' Draw created physics bodies
@@ -117,24 +115,26 @@ DO
             ' Get physics bodies shape vertices to draw lines
             DIM j AS LONG
             DIM vertexA AS Vector2: GetPhysicsShapeVertex bodyPtr, 0, vertexA
-            PSET (vertexA.x, vertexA.y), WHITE
+            PSET (vertexA.x, vertexA.y), White
 
             FOR j = 1 TO vertexCount - 1
                 DIM vertexB AS Vector2: GetPhysicsShapeVertex bodyPtr, j, vertexB
-                LINE -(vertexB.x, vertexB.y), GREEN
+                LINE -(vertexB.x, vertexB.y), Green
             NEXT
 
-            LINE -(vertexA.x, vertexA.y), GREEN
+            LINE -(vertexA.x, vertexA.y), Green
         END IF
     NEXT
 
     ' Draw UI elements
     _PRINTSTRING ((SCREENWIDTH - _PRINTWIDTH("Friction amount")) \ 2, 75), "Friction amount"
-    _PRINTSTRING (bodyA->position.x - _PRINTWIDTH("0.1") \ 2, bodyA->position.y - 7), "0.1"
-    _PRINTSTRING (bodyB->position.x - _PRINTWIDTH("1") \ 2, bodyB->position.y - 7), "1"
+    GetPtrBody body, bodyA
+    _PRINTSTRING (body.position.x - _PRINTWIDTH("0.1") \ 2, body.position.y - 7), "0.1"
+    GetPtrBody body, bodyB
+    _PRINTSTRING (body.position.x - _PRINTWIDTH("1") \ 2, body.position.y - 7), "1"
 
     _PUTIMAGE (SCREENWIDTH - 100, 0)-(SCREENWIDTH - 1, 99), logo
-    COLOR BLACK
+    COLOR Black
     _PRINTSTRING (logoX, logoY), LOGOTEXT
 
     _DISPLAY
@@ -162,20 +162,3 @@ SUB SetPtrBody (bodyPtr AS _UNSIGNED _OFFSET, body AS PhysicsBody)
     PokeType bodyPtr, 0, _OFFSET(body), LEN(body)
     $CHECKING:ON
 END SUB
-
-FUNCTION GetHertz~&
-    STATIC AS _UNSIGNED LONG eventCounter, frequency
-    STATIC lastTick AS _UNSIGNED _INTEGER64
-
-    DIM currentTick AS _UNSIGNED _INTEGER64: currentTick = GetTicks
-
-    IF currentTick >= lastTick + 1000 THEN
-        lastTick = currentTick
-        frequency = eventCounter
-        eventCounter = 0
-    END IF
-
-    eventCounter = eventCounter + 1
-
-    GetHertz = frequency
-END FUNCTION

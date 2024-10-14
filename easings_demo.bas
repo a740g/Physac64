@@ -98,7 +98,10 @@ DO
     CLS , White
     SetVector2 vec, rec.w / 2!, rec.h / 2!
     DrawRectanglePro rec, vec, rotation, Fade(Black, alpha)
-    COLOR Gray: _PRINTSTRING (20, screenHeight - 25), "PRESS [SPACE] TO RESET BOX ANIMATION!"
+
+    COLOR Gray
+    _PRINTSTRING (30, screenHeight - 30), "PRESS [SPACE] TO RESET BOX ANIMATION!"
+    _PRINTSTRING (screenWidth - 90, screenHeight - 30), STR$(GetHertz) + " FPS"
 
     _DISPLAY
 

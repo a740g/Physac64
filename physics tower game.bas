@@ -163,7 +163,7 @@ SUB PrepareGame
     LoadAllSFX
     ReadHiscore ' Read high scores from file (or create them if the file doesn't exist or can't be read)
     SetGameState STATE_WAIT_TO_START ' Set the game state in its initial state
-    InitPhysics
+    InitPhysics TRUE
     SetPhysicsGravity 0, -9.81 / game.fps% ' This works much better with the fps taken into account (but only for regular polygons)
 END SUB
 
@@ -552,4 +552,3 @@ SUB _GL
 END SUB
 
 '======================================================================================================================================================================================================
-

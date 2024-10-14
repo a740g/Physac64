@@ -9,6 +9,12 @@
 #define PHYSAC_IMPLEMENTATION
 #include "external/physac.h"
 
+inline void __InitPhysics(qb_bool isThreaded)
+{
+    physicsCreateThread = bool(isThreaded);
+    InitPhysics();
+}
+
 inline qb_bool __IsPhysicsEnabled()
 {
     return TO_QB_BOOL(IsPhysicsEnabled());

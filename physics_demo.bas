@@ -14,6 +14,9 @@ $EXEICON:'./physac.ico'
 
 '$INCLUDE:'include/physac.bi'
 
+' Set this to true to make physac run on it's own thread
+$LET THREADED_DEMO = FALSE
+
 ' Initialization
 '--------------------------------------------------------------------------------------
 CONST FALSE%% = 0%%, TRUE%% = NOT FALSE
@@ -26,7 +29,12 @@ SCREEN _NEWIMAGE(SCREENWIDTH, SCREENHEIGHT, 32)
 
 DO: LOOP UNTIL _SCREENEXISTS
 
-_TITLE "physac demo"
+$IF THREADED_DEMO = TRUE THEN
+    _TITLE "physac demo (threaded)"
+$ELSE
+    _TITLE "physac demo"
+$END IF
+
 _PRINTMODE _KEEPBACKGROUND
 
 ' Physac logo drawing position
@@ -36,7 +44,11 @@ DIM AS LONG logoY: logoY = 15
 DIM logo AS LONG: logo = _LOADIMAGE("physac.ico")
 
 ' Initialize physics and default physics bodies
-InitPhysics
+$IF THREADED_DEMO = TRUE THEN
+    InitPhysics TRUE
+$ELSE
+    InitPhysics FALSE
+$END IF
 
 DIM vec AS Vector2, body AS PhysicsBody, bodyPtr AS _UNSIGNED _OFFSET
 
@@ -61,11 +73,19 @@ DIM k AS LONG
 DO
     ' Update
     '----------------------------------------------------------------------------------
+    $IF THREADED_DEMO = FALSE THEN
+        RunPhysicsStep
+    $END IF
+
     k = _KEYHIT
 
     IF k = 114 _ORELSE k = 82 THEN ' Reset physics system
         ClosePhysics
-        InitPhysics
+        $IF THREADED_DEMO = TRUE THEN
+            InitPhysics TRUE
+        $ELSE
+            InitPhysics FALSE
+        $END IF
 
         SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
         floor = CreatePhysicsBodyRectangle(vec, 500, 100, 10)
@@ -181,25 +201,5 @@ END SUB
 FUNCTION GetRandomValue& (lo AS LONG, hi AS LONG)
     $CHECKING:OFF
     GetRandomValue = lo + RND * (hi - lo)
-    $CHECKING:ON
-END FUNCTION
-
-
-FUNCTION GetHertz~&
-    $CHECKING:OFF
-    STATIC AS _UNSIGNED LONG eventCounter, frequency
-    STATIC lastTick AS _UNSIGNED _INTEGER64
-
-    DIM currentTick AS _UNSIGNED _INTEGER64: currentTick = GetTicks
-
-    IF currentTick >= lastTick + 1000 THEN
-        lastTick = currentTick
-        frequency = eventCounter
-        eventCounter = 0
-    END IF
-
-    eventCounter = eventCounter + 1
-
-    GetHertz = frequency
     $CHECKING:ON
 END FUNCTION
