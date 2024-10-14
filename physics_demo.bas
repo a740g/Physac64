@@ -13,14 +13,13 @@ $COLOR:32
 $EXEICON:'./physac.ico'
 
 '$INCLUDE:'include/physac.bi'
+'$INCLUDE:'include/raymath.bi'
 
 ' Set this to true to make physac run on it's own thread
 $LET THREADED_DEMO = FALSE
 
 ' Initialization
 '--------------------------------------------------------------------------------------
-CONST FALSE%% = 0%%, TRUE%% = NOT FALSE
-CONST NULL~& = 0~&
 CONST SCREENWIDTH& = 800&
 CONST SCREENHEIGHT& = 450&
 CONST LOGOTEXT = "Powered by"
@@ -42,6 +41,8 @@ DIM AS LONG logoX: logoX = SCREENWIDTH - _PRINTWIDTH(LOGOTEXT) - 10
 DIM AS LONG logoY: logoY = 15
 
 DIM logo AS LONG: logo = _LOADIMAGE("physac.ico")
+
+SetRandomSeed TIMER
 
 ' Initialize physics and default physics bodies
 $IF THREADED_DEMO = TRUE THEN
@@ -196,10 +197,3 @@ SUB SetPtrBody (bodyPtr AS _UNSIGNED _OFFSET, body AS PhysicsBody)
     PokeType bodyPtr, 0, _OFFSET(body), LEN(body) ' write type to ptr
     $CHECKING:ON
 END SUB
-
-
-FUNCTION GetRandomValue& (lo AS LONG, hi AS LONG)
-    $CHECKING:OFF
-    GetRandomValue = lo + RND * (hi - lo)
-    $CHECKING:ON
-END FUNCTION

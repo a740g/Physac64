@@ -20,8 +20,6 @@ CONST VELOCITY! = 0.5!
 
 ' Initialization
 '--------------------------------------------------------------------------------------
-CONST FALSE%% = 0%%, TRUE%% = NOT FALSE
-CONST NULL~& = 0~&
 CONST SCREENWIDTH& = 800&
 CONST SCREENHEIGHT& = 450&
 CONST LOGOTEXT = "Powered by"
@@ -57,7 +55,7 @@ DIM AS _UNSIGNED _OFFSET platformRight: platformRight = CreatePhysicsBodyRectang
 SetVector2 vec, -5, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET wallLeft: wallLeft = CreatePhysicsBodyRectangle(vec, 10, SCREENHEIGHT, 10)
 
-SetVector2 vec, SCREENWIDTH + 5, SCREENHEIGHT / 2!
+SetVector2 vec, SCREENWIDTH + 4, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET wallRight: wallRight = CreatePhysicsBodyRectangle(vec, 10, SCREENHEIGHT, 10)
 
 ' Disable dynamics to floor and walls physics bodies

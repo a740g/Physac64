@@ -9,6 +9,25 @@
 #define RAYMATH_IMPLEMENTATION
 #include "external/raymath.h"
 
+extern void sub_randomize(double seed, int32_t passed); // QB64's random seed function
+
+/// @brief Set the seed for the random number generator (CRT and QB64)
+/// @param seed Any number
+inline void SetRandomSeed(uint32_t seed)
+{
+    std::srand(seed);
+    sub_randomize(seed, 1);
+}
+
+/// @brief Returns a random number between lo and hi (inclusive). Use srand() to seed RNG
+/// @param lo The lower limit
+/// @param hi The upper limit
+/// @return A number between lo and hi
+inline int32_t GetRandomValue(int32_t lo, int32_t hi)
+{
+    return lo + std::rand() % (hi - lo + 1);
+}
+
 inline qb_bool __FloatEquals(float f1, float f2)
 {
     return TO_QB_BOOL(FloatEquals(f1, f2));

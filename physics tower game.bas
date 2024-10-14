@@ -41,9 +41,6 @@ OPTION _EXPLICITARRAY
 
 '======================================================================================================================================================================================================
 
-CONST FALSE = 0
-CONST TRUE = NOT FALSE
-
 CONST USE_RECTANGLES = TRUE ' Unfortunately Physac doesn't handle rectangles very well so I'm defaulting to using squares
 
 CONST SCREEN_WIDTH = 480 ' Resolution of the unscaled game area

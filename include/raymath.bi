@@ -41,6 +41,8 @@ DECLARE STATIC LIBRARY "raymath"
     FUNCTION Log2Double# ALIAS "log2" (BYVAL n AS DOUBLE)
     FUNCTION CubeRootSingle! ALIAS "cbrtf" (BYVAL n AS SINGLE)
     FUNCTION CubeRootDouble# ALIAS "cbrt" (BYVAL n AS DOUBLE)
+    SUB SetRandomSeed (BYVAL seed AS _UNSIGNED LONG) ' Set the seed for the random number generator
+    FUNCTION GetRandomValue& (BYVAL min AS LONG, BYVAL max AS LONG) ' Get a random value between min and max (both included)
 
     ' Vector2 math
     SUB Vector2Zero ALIAS "__Vector2Zero" (v AS Vector2) ' Vector with components value 0.0f

@@ -17,8 +17,6 @@ $EXEICON:'./physac.ico'
 
 ' Initialization
 '--------------------------------------------------------------------------------------
-CONST FALSE%% = 0%%, TRUE%% = NOT FALSE
-CONST NULL~& = 0~&
 CONST SCREENWIDTH& = 800&
 CONST SCREENHEIGHT& = 450&
 CONST LOGOTEXT = "Powered by"
