@@ -86,7 +86,7 @@ DO
     ' Reset animation at any moment
     k = _KEYHIT
 
-    IF k = 32 THEN
+    IF k = _ASC_SPACE THEN
         rec.x = screenWidth / 2.0!: rec.y = -100!: rec.w = 100!: rec.h = 100!
         rotation = 0.0!
         alpha = 1.0!
@@ -106,7 +106,7 @@ DO
     _DISPLAY
 
     _LIMIT 60
-LOOP UNTIL k = 27
+LOOP UNTIL k = _KEY_ESC
 
 SYSTEM
 

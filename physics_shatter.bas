@@ -35,14 +35,14 @@ _PRINTMODE _KEEPBACKGROUND
 ' Physac logo drawing position
 DIM AS LONG logoX: logoX = SCREENWIDTH - _PRINTWIDTH(LOGOTEXT) - 10
 DIM AS LONG logoY: logoY = 15
-DIM shatter AS _BYTE: shatter = FALSE
+DIM shatter AS _BYTE: shatter = _FALSE
 
 DIM logo AS LONG: logo = _LOADIMAGE("physac.ico")
 
 SetRandomSeed TIMER
 
 ' Initialize physics and default physics bodies
-InitPhysics TRUE
+InitPhysics _TRUE
 SetPhysicsGravity 0, 0
 
 ' Create random polygon physics body to shatter
@@ -59,7 +59,7 @@ DO
     WHILE _MOUSEINPUT: WEND
 
     IF NOT shatter AND _MOUSEBUTTON(1) THEN
-        shatter = TRUE
+        shatter = _TRUE
 
         DIM count AS LONG: count = GetPhysicsBodiesCount
         FOR i = count - 1 TO 0 STEP -1
@@ -114,7 +114,7 @@ DO
 
     _LIMIT 60
     '----------------------------------------------------------------------------------
-LOOP UNTIL _KEYHIT = 27
+LOOP UNTIL _KEYHIT = _KEY_ESC
 
 ' De-Initialization
 '--------------------------------------------------------------------------------------

@@ -38,7 +38,7 @@ DIM AS LONG logoY: logoY = 15
 DIM logo AS LONG: logo = _LOADIMAGE("physac.ico")
 
 ' Initialize physics and default physics bodies
-InitPhysics TRUE
+InitPhysics _TRUE
 
 DIM vec AS Vector2, body AS PhysicsBody
 
@@ -59,17 +59,17 @@ SetVector2 vec, SCREENWIDTH + 4, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET wallRight: wallRight = CreatePhysicsBodyRectangle(vec, 10, SCREENHEIGHT, 10)
 
 ' Disable dynamics to floor and walls physics bodies
-GetPhysicsBodyOffset body, floor: body.enabled = FALSE: SetPhysicsBodyOffset floor, body
-GetPhysicsBodyOffset body, platformLeft: body.enabled = FALSE: SetPhysicsBodyOffset platformLeft, body
-GetPhysicsBodyOffset body, platformRight: body.enabled = FALSE: SetPhysicsBodyOffset platformRight, body
-GetPhysicsBodyOffset body, wallLeft: body.enabled = FALSE: SetPhysicsBodyOffset wallLeft, body
-GetPhysicsBodyOffset body, wallRight: body.enabled = FALSE: SetPhysicsBodyOffset wallRight, body
+GetPhysicsBodyOffset body, floor: body.enabled = _FALSE: SetPhysicsBodyOffset floor, body
+GetPhysicsBodyOffset body, platformLeft: body.enabled = _FALSE: SetPhysicsBodyOffset platformLeft, body
+GetPhysicsBodyOffset body, platformRight: body.enabled = _FALSE: SetPhysicsBodyOffset platformRight, body
+GetPhysicsBodyOffset body, wallLeft: body.enabled = _FALSE: SetPhysicsBodyOffset wallLeft, body
+GetPhysicsBodyOffset body, wallRight: body.enabled = _FALSE: SetPhysicsBodyOffset wallRight, body
 
 ' Create movement physics body
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET playerBody: playerBody = CreatePhysicsBodyRectangle(vec, 50, 50, 1)
 GetPhysicsBodyOffset body, playerBody
-body.freezeOrient = TRUE ' Constrain body rotation to avoid collision torque
+body.freezeOrient = _TRUE ' Constrain body rotation to avoid collision torque
 SetPhysicsBodyOffset playerBody, body
 
 ' Main game loop
@@ -79,11 +79,11 @@ DO
     GetPhysicsBodyOffset body, playerBody
 
     ' Horizontal movement input
-    IF _KEYDOWN(19712) THEN body.velocity.x = VELOCITY ' Right arrow key
-    IF _KEYDOWN(19200) THEN body.velocity.x = -VELOCITY ' Left arrow key
+    IF _KEYDOWN(_KEY_RIGHT) THEN body.velocity.x = VELOCITY ' Right arrow key
+    IF _KEYDOWN(_KEY_LEFT) THEN body.velocity.x = -VELOCITY ' Left arrow key
 
     ' Vertical movement input checking if player physics body is grounded
-    IF _KEYDOWN(18432) AND body.isGrounded THEN body.velocity.y = -VELOCITY * 4 ' Up arrow key
+    IF _KEYDOWN(_KEY_UP) AND body.isGrounded THEN body.velocity.y = -VELOCITY * 4 ' Up arrow key
 
     SetPhysicsBodyOffset playerBody, body
     '----------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ DO
 
     _LIMIT 60
     '----------------------------------------------------------------------------------
-LOOP UNTIL _KEYHIT = 27
+LOOP UNTIL _KEYHIT = _KEY_ESC
 
 ' De-Initialization
 '--------------------------------------------------------------------------------------

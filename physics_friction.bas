@@ -35,7 +35,7 @@ DIM AS LONG logoY: logoY = 15
 DIM logo AS LONG: logo = _LOADIMAGE("physac.ico")
 
 ' Initialize physics and default physics bodies
-InitPhysics TRUE
+InitPhysics _TRUE
 
 DIM vec AS Vector2, body AS PhysicsBody
 
@@ -43,21 +43,21 @@ DIM vec AS Vector2, body AS PhysicsBody
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
 DIM AS _UNSIGNED _OFFSET floor: floor = CreatePhysicsBodyRectangle(vec, SCREENWIDTH, 100, 10)
 GetPhysicsBodyOffset body, floor ' read type from ptr
-body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
+body.enabled = _FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
 SetPhysicsBodyOffset floor, body ' write type to ptr
 
 ' Create wall rectangle physics body
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT * 0.8!
 DIM AS _UNSIGNED _OFFSET wall: wall = CreatePhysicsBodyRectangle(vec, 10, 80, 10)
 GetPhysicsBodyOffset body, wall ' read type from ptr
-body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
+body.enabled = _FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
 SetPhysicsBodyOffset wall, body ' write type to ptr
 
 ' Create left ramp rectangle physics body
 SetVector2 vec, 25, SCREENHEIGHT - 5
 DIM AS _UNSIGNED _OFFSET rectLeft: rectLeft = CreatePhysicsBodyRectangle(vec, 250, 250, 10)
 GetPhysicsBodyOffset body, rectLeft
-body.enabled = FALSE
+body.enabled = _FALSE
 SetPhysicsBodyOffset rectLeft, body
 SetPhysicsBodyRotation rectLeft, 30! * PHYSAC_DEG2RAD
 
@@ -65,7 +65,7 @@ SetPhysicsBodyRotation rectLeft, 30! * PHYSAC_DEG2RAD
 SetVector2 vec, SCREENWIDTH - 25, SCREENHEIGHT - 5
 DIM AS _UNSIGNED _OFFSET rectRight: rectRight = CreatePhysicsBodyRectangle(vec, 250, 250, 10)
 GetPhysicsBodyOffset body, rectRight
-body.enabled = FALSE
+body.enabled = _FALSE
 SetPhysicsBodyOffset rectRight, body
 SetPhysicsBodyRotation rectRight, 330! * PHYSAC_DEG2RAD
 
@@ -139,7 +139,7 @@ DO
 
     _LIMIT 60
     '----------------------------------------------------------------------------------
-LOOP UNTIL _KEYHIT = 27
+LOOP UNTIL _KEYHIT = _KEY_ESC
 
 ' De-Initialization
 '--------------------------------------------------------------------------------------

@@ -46,9 +46,9 @@ SetRandomSeed TIMER
 
 ' Initialize physics and default physics bodies
 $IF THREADED_DEMO = TRUE THEN
-    InitPhysics TRUE
+    InitPhysics _TRUE
 $ELSE
-    InitPhysics FALSE
+    InitPhysics _FALSE
 $END IF
 
 DIM vec AS Vector2, body AS PhysicsBody, bodyPtr AS _UNSIGNED _OFFSET
@@ -57,14 +57,14 @@ DIM vec AS Vector2, body AS PhysicsBody, bodyPtr AS _UNSIGNED _OFFSET
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
 DIM AS _UNSIGNED _OFFSET floor: floor = CreatePhysicsBodyRectangle(vec, 500, 100, 10)
 GetPhysicsBodyOffset body, floor ' read type from ptr
-body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
+body.enabled = _FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
 SetPhysicsBodyOffset floor, body ' write type to ptr
 
 ' Create obstacle circle physics body (PhysicsBody)
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT / 2!
 DIM AS _UNSIGNED _OFFSET circl: circl = CreatePhysicsBodyCircle(vec, 45, 10)
 GetPhysicsBodyOffset body, circl ' read type from ptr
-body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
+body.enabled = _FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
 SetPhysicsBodyOffset circl, body ' write type to ptr
 '--------------------------------------------------------------------------------------
 
@@ -83,21 +83,21 @@ DO
     IF k = 114 _ORELSE k = 82 THEN ' Reset physics system
         ClosePhysics
         $IF THREADED_DEMO = TRUE THEN
-            InitPhysics TRUE
+            InitPhysics _TRUE
         $ELSE
-            InitPhysics FALSE
+            InitPhysics _FALSE
         $END IF
 
         SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
         floor = CreatePhysicsBodyRectangle(vec, 500, 100, 10)
         GetPhysicsBodyOffset body, floor ' read type from ptr
-        body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
+        body.enabled = _FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
         SetPhysicsBodyOffset floor, body ' write type to ptr
 
         SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT / 2!
         circl = CreatePhysicsBodyCircle(vec, 45, 10)
         GetPhysicsBodyOffset body, circl ' read type from ptr
-        body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
+        body.enabled = _FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
         SetPhysicsBodyOffset circl, body ' write type to ptr
     END IF
 
@@ -175,7 +175,7 @@ DO
 
     _LIMIT 60
     '----------------------------------------------------------------------------------
-LOOP UNTIL k = 27
+LOOP UNTIL k = _KEY_ESC
 
 ' De-Initialization
 '--------------------------------------------------------------------------------------

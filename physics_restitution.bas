@@ -35,7 +35,7 @@ DIM AS LONG logoY: logoY = 15
 DIM logo AS LONG: logo = _LOADIMAGE("physac.ico")
 
 ' Initialize physics and default physics bodies
-InitPhysics TRUE
+InitPhysics _TRUE
 
 DIM vec AS Vector2, body AS PhysicsBody
 
@@ -43,7 +43,7 @@ DIM vec AS Vector2, body AS PhysicsBody
 SetVector2 vec, SCREENWIDTH / 2!, SCREENHEIGHT
 DIM AS _UNSIGNED _OFFSET floor: floor = CreatePhysicsBodyRectangle(vec, SCREENWIDTH, 100, 10)
 GetPhysicsBodyOffset body, floor ' read type from ptr
-body.enabled = FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
+body.enabled = _FALSE ' Disable body state to convert it to static (no dynamics, but collisions)
 body.restitution = 1
 SetPhysicsBodyOffset floor, body
 
@@ -121,7 +121,7 @@ DO
 
     _LIMIT 60
     '----------------------------------------------------------------------------------
-LOOP UNTIL _KEYHIT = 27
+LOOP UNTIL _KEYHIT = _KEY_ESC
 
 ' De-Initialization
 '--------------------------------------------------------------------------------------
