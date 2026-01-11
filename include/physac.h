@@ -6,6 +6,21 @@
 #pragma once
 
 #include "support.h"
+
+#ifdef _WIN32
+#include <windows.h>
+
+inline void QueryPerformanceFrequency(unsigned long long int *lpFrequency)
+{
+    QueryPerformanceFrequency((LARGE_INTEGER *)lpFrequency);
+}
+
+inline void QueryPerformanceCounter(unsigned long long int *lpPerformanceCount)
+{
+    QueryPerformanceCounter((LARGE_INTEGER *)lpPerformanceCount);
+}
+#endif
+
 #define PHYSAC_IMPLEMENTATION
 #include "external/physac.h"
 

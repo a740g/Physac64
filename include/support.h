@@ -281,19 +281,19 @@ inline void SetVector4(void *v, float x, float y, float z, float w)
 /// @return A positive Hertz value
 uint32_t GetHertz()
 {
-    static uint32_t eventCounter = 0, frequency = 0;
+    static uint32_t counter = 0, finalFPS = 0;
     static uint64_t lastTime = 0;
 
     uint64_t currentTime = GetTicks();
 
-    if (currentTime >= lastTime + 1000)
+    if (currentTime - lastTime >= 1000)
     {
         lastTime = currentTime;
-        frequency = eventCounter;
-        eventCounter = 0;
+        finalFPS = counter;
+        counter = 0;
     }
 
-    ++eventCounter;
+    ++counter;
 
-    return frequency;
+    return finalFPS;
 }

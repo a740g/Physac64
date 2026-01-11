@@ -10,9 +10,10 @@ $INCLUDEONCE
 CONST PHYSAC_MAX_BODIES& = 64& ' Maximum number of physic bodies supported
 CONST PHYSAC_MAX_MANIFOLDS& = 4096& ' Maximum number of physic bodies interactions (64x64)
 CONST PHYSAC_MAX_VERTICES& = 24& ' Maximum number of vertex for polygons shapes
-CONST PHYSAC_DEFAULT_CIRCLE_VERTICES& = 24& ' Default number of vertices for circle shapes
+CONST PHYSAC_CIRCLE_VERTICES& = 24& ' Default number of vertices for circle shapes
 
-CONST PHYSAC_COLLISION_ITERATIONS& = 100&
+CONST PHYSAC_FIXED_TIME! = 1.0! / 60.0!
+CONST PHYSAC_COLLISION_ITERATIONS& = 20&
 CONST PHYSAC_PENETRATION_ALLOWANCE! = 0.05!
 CONST PHYSAC_PENETRATION_CORRECTION! = 0.4!
 

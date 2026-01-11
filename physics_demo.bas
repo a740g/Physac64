@@ -16,7 +16,7 @@ $EXEICON:'./physac.ico'
 '$INCLUDE:'include/raymath.bi'
 
 ' Set this to true to make physac run on it's own thread
-$LET THREADED_DEMO = FALSE
+$LET THREADED_DEMO = TRUE
 
 ' Initialization
 '--------------------------------------------------------------------------------------
